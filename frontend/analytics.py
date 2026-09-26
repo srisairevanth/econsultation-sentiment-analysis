@@ -2,7 +2,7 @@
 Part 5.3 / 5.5: Sentiment analytics and descriptive (non-causal) insights.
 
 Operates on any DataFrame containing a sentiment column (e.g. the output of
-prediction/batch_predict.py, with column 'predicted_sentiment', or a labeled
+frontend/batch_predict.py, with column 'predicted_sentiment', or a labeled
 dataset with column 'label'). Never fabricates data - if a requested signal
 (e.g. dates) isn't present, it is reported as unavailable rather than invented.
 """

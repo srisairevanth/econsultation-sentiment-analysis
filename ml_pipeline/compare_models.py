@@ -49,7 +49,6 @@ def compare_models(train_df, eval_df, random_state: int = config.RANDOM_STATE) -
         fitted[name] = pipeline
 
         if use_cv:
-            from sklearn.model_selection import cross_val_predict
             preds = cross_val_predict(pipeline, train_df["comment"], train_df["label"], cv=3)
             metrics = evaluate_predictions(train_df["label"], preds)
             metrics["evaluated_on"] = "3fold_cv_on_train"

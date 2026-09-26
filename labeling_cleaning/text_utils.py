@@ -1,6 +1,6 @@
 """
 Shared text-normalization utilities used by BOTH the offline cleaning pipeline
-(preprocessing/clean_dataset.py) and the online predictor (prediction/predictor.py).
+(labeling_cleaning/clean_dataset.py) and the online predictor (frontend/predictor.py).
 
 Keeping this logic in one place guarantees that a comment is normalized the
 SAME way at training time and at prediction time - a common source of subtle
