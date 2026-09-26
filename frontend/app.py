@@ -189,7 +189,7 @@ with tab_single:
     if ex_col4.button("\U0001F3B2 Surprise me"):
         pool = _load_real_comments_pool()
         if len(pool):
-            st.session_state["single_comment_input"] = pool.sample(1).iloc[0]["comment"]
+            st.session_state["single_comment_input"] = str(pool.sample(1).iloc[0]["comment"])
 
     comment_text = st.text_area("Enter an e-consultation comment", height=120, key="single_comment_input",
                                  placeholder="e.g. This proposal creates unnecessary compliance costs.")

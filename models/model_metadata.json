@@ -1,7 +1,7 @@
 {
   "model_type": "tfidf_linear_svm",
   "selection_reason": "Highest Macro F1 (tie-break: Weighted F1, then Accuracy) on the validation split, compared fairly against TF-IDF+LogReg, Linear SVM, and Multinomial NB.",
-  "training_date_utc": "2026-09-26T08:53:40.171850+00:00",
+  "training_date_utc": "2026-09-26T09:34:19.340716+00:00",
   "random_state": 42,
   "dataset_size_total": 862,
   "dataset_class_distribution": {
