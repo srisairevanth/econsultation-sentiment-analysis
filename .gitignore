@@ -1,0 +1,15 @@
+# Secrets - never commit
+.env
+.streamlit/secrets.toml
+
+# Python
+__pycache__/
+*.pyc
+
+# Local LLM labeling checkpoints/failures (transient, not needed once labeling is done)
+*.checkpoint.json
+failed_comments.json
+
+# Trained model, real data, and reports ARE committed on purpose: this makes the app runnable
+# immediately after a fresh clone / cloud deploy without re-running extraction, Ollama labeling,
+# or training. Nothing here is being hidden from version control.

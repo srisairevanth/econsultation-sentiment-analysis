@@ -1,0 +1,18 @@
+Truth in Lending Act (TILA) / Regulation Z (Overview)
+
+The Truth in Lending Act requires lenders to disclose credit terms and costs to consumers in a
+standardized, understandable way, so borrowers can compare loan offers. It is implemented
+primarily through Regulation Z, issued by the Consumer Financial Protection Bureau.
+
+Commonly referenced concepts:
+- Annual Percentage Rate (APR): a standardized measure of the cost of credit.
+- Right of rescission: for certain loans secured by a consumer's principal dwelling, borrowers
+  may cancel within a specified period.
+- Required disclosures for credit cards, mortgages, and other consumer credit products.
+- Rules limiting certain high-cost mortgage practices.
+
+This file is a general, non-exhaustive educational summary for demonstration purposes. It is
+NOT a substitute for the official statutory text or implementing agency regulations.
+
+[PLACEHOLDER] Replace or extend this file with the specific docket/regulation text relevant to
+the comments collected via the Regulations.gov extraction module for this project.

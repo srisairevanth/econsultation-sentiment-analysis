@@ -1,0 +1,9 @@
+Raw Comment Cleaning Report
+========================================
+Input batches: ['batch1_ftc_111.json', 'batch2_ftc_1000.json']
+Total unique raw records (by Regulations.gov comment ID): 1111
+Dropped - null/empty comment body: 65
+Dropped - attachment-only placeholder (e.g. 'See attached'): 179
+Dropped - exact duplicate text (after normalization): 5
+Kept - clean, unique, substantive comments: 862
+Output: /sessions/rcw-01ri61k2ywbbgsx4qhslbfzm/mnt/mini projjjj/data/raw/raw_financial_comments.json

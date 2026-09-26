@@ -1,0 +1,19 @@
+Dodd-Frank Wall Street Reform and Consumer Protection Act (Overview)
+
+The Dodd-Frank Act was enacted in 2010 in response to the 2008 financial crisis. Its stated
+goals include promoting financial stability, ending "too big to fail," protecting consumers
+from abusive financial practices, and increasing transparency in complex financial markets.
+
+Key components commonly referenced in public comments include:
+- Creation of the Consumer Financial Protection Bureau (CFPB) to supervise consumer financial
+  products and services.
+- The "Volcker Rule," which restricts banks from certain kinds of speculative proprietary trading.
+- Enhanced regulatory oversight of large, systemically important financial institutions.
+- New requirements for derivatives markets, including central clearing for many swaps.
+- Whistleblower protections and incentive programs for reporting securities law violations.
+
+This file is a general, non-exhaustive educational summary for demonstration purposes. It is
+NOT a substitute for the official statutory text or implementing agency regulations.
+
+[PLACEHOLDER] Replace or extend this file with the specific docket/regulation text relevant to
+the comments collected via the Regulations.gov extraction module for this project.

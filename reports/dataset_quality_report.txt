@@ -1,0 +1,29 @@
+DATASET QUALITY REPORT
+============================================================
+Generated: 2026-09-26T08:24:16.058796+00:00
+Source file: C:\Users\sai\OneDrive\Desktop\MINI Project\data\labeled\labeled_comments.csv
+
+Original dataset size:            862
+Invalid labels found:             0 {}
+Empty/null comments removed:      0
+Exact duplicate comments:         0
+Duplicate (comment+label) rows:   0
+Duplicates removed:               0
+Empty after normalization:        0
+Final dataset size:               862
+
+LABEL DISTRIBUTION
+------------------------------------------------------------
+  Positive  :     83  (9.63%)
+  Negative  :    602  (69.84%)
+  Neutral   :    177  (20.53%)
+
+TEXT LENGTH (characters)
+------------------------------------------------------------
+  min=7  max=4984  mean=1119.3  median=643.5
+  Short comments flagged (< 3 words): 3
+
+WARNINGS
+------------------------------------------------------------
+  - 3 comments are shorter than 3 words / 10 chars and were flagged (not auto-removed) - review reports/dataset_quality_report.json.
+  - Class imbalance detected (majority:minority ratio = 7.25). Consider class_weight='balanced' during training, macro-F1 as the primary metric, or targeted collection of the minority class(es). Synthetic oversampling was NOT applied automatically.
