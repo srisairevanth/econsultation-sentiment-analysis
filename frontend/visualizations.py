@@ -1,67 +1,52 @@
 """
-Part 5.4: Sentiment visualizations.
+Interactive sentiment visualizations (Plotly), for the Streamlit app.
 
-Generates a bar chart, a donut chart, and (only if real date data is present)
-a sentiment-trend-over-time chart. Nothing is fabricated: the trend chart is
-skipped with a clear message when no usable date column exists.
-
-Charts are saved under reports/visualizations/.
+Generates a bar chart, a donut chart, a sentiment-trend-over-time chart (only
+if real date data is present), a confusion-matrix heatmap, and a model
+comparison chart. Nothing is fabricated: the trend chart returns None with a
+clear reason when no usable date column exists.
 """
 import sys
 from pathlib import Path
-from typing import Optional
+from typing import List, Optional
 
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
 import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import config
 from analytics import find_date_column
+from theme import SENTIMENT_COLORS
 
-SENTIMENT_COLORS = {"Positive": "#2ca02c", "Negative": "#d62728", "Neutral": "#7f7f7f"}
 
-
-def plot_sentiment_bar(counts: dict, out_path: Path = config.VISUALIZATIONS_DIR / "sentiment_bar_chart.png"):
+def plot_sentiment_bar(counts: dict) -> go.Figure:
     labels = config.ALLOWED_LABELS
     values = [counts.get(l, 0) for l in labels]
-    colors = [SENTIMENT_COLORS[l] for l in labels]
-
-    fig, ax = plt.subplots(figsize=(6, 4.5))
-    bars = ax.bar(labels, values, color=colors)
-    ax.set_title("Sentiment Distribution of Analyzed Comments")
-    ax.set_ylabel("Number of Comments")
-    ax.bar_label(bars, padding=3)
-    ax.spines[["top", "right"]].set_visible(False)
-    fig.tight_layout()
-    out_path.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(out_path, dpi=150)
-    plt.close(fig)
-    return out_path
+    fig = px.bar(
+        x=labels, y=values, color=labels, color_discrete_map=SENTIMENT_COLORS,
+        text=values, labels={"x": "Sentiment", "y": "Number of Comments"},
+        title="Sentiment Distribution",
+    )
+    fig.update_traces(textposition="outside", showlegend=False)
+    fig.update_layout(margin=dict(l=10, r=10, t=40, b=10), height=360)
+    return fig
 
 
-def plot_sentiment_donut(counts: dict, out_path: Path = config.VISUALIZATIONS_DIR / "sentiment_donut_chart.png"):
+def plot_sentiment_donut(counts: dict) -> go.Figure:
     labels = [l for l in config.ALLOWED_LABELS if counts.get(l, 0) > 0]
     values = [counts[l] for l in labels]
-    colors = [SENTIMENT_COLORS[l] for l in labels]
-
-    fig, ax = plt.subplots(figsize=(5.5, 5.5))
-    if values:
-        wedges, texts, autotexts = ax.pie(
-            values, labels=labels, colors=colors, autopct="%1.1f%%",
-            startangle=90, wedgeprops=dict(width=0.4),
-        )
-    ax.set_title("Sentiment Percentage Summary")
-    fig.tight_layout()
-    out_path.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(out_path, dpi=150)
-    plt.close(fig)
-    return out_path
+    fig = px.pie(
+        values=values, names=labels, hole=0.55,
+        color=labels, color_discrete_map=SENTIMENT_COLORS,
+        title="Sentiment Percentage Summary",
+    )
+    fig.update_traces(textinfo="label+percent")
+    fig.update_layout(margin=dict(l=10, r=10, t=40, b=10), height=360)
+    return fig
 
 
-def plot_sentiment_trend(df: pd.DataFrame, sentiment_column: str,
-                          out_path: Path = config.VISUALIZATIONS_DIR / "sentiment_trend.png") -> Optional[Path]:
+def plot_sentiment_trend(df: pd.DataFrame, sentiment_column: str) -> Optional[go.Figure]:
     """Only produced when a real, parseable date column exists. Returns None otherwise."""
     date_col = find_date_column(df)
     if date_col is None:
@@ -78,34 +63,39 @@ def plot_sentiment_trend(df: pd.DataFrame, sentiment_column: str,
     for label in config.ALLOWED_LABELS:
         if label not in trend.columns:
             trend[label] = 0
-    trend = trend[config.ALLOWED_LABELS]
+    trend = trend[config.ALLOWED_LABELS].reset_index()
 
-    fig, ax = plt.subplots(figsize=(8, 4.5))
+    fig = go.Figure()
     for label in config.ALLOWED_LABELS:
-        ax.plot(trend.index, trend[label], marker="o", label=label, color=SENTIMENT_COLORS[label])
-    ax.set_title("Sentiment Trend Over Time")
-    ax.set_xlabel("Month")
-    ax.set_ylabel("Number of Comments")
-    ax.legend()
-    ax.spines[["top", "right"]].set_visible(False)
-    fig.autofmt_xdate()
-    fig.tight_layout()
-    out_path.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(out_path, dpi=150)
-    plt.close(fig)
-    return out_path
+        fig.add_trace(go.Scatter(
+            x=trend["_period"], y=trend[label], mode="lines+markers",
+            name=label, line=dict(color=SENTIMENT_COLORS[label]),
+        ))
+    fig.update_layout(
+        title="Sentiment Trend Over Time", xaxis_title="Month", yaxis_title="Number of Comments",
+        margin=dict(l=10, r=10, t=40, b=10), height=380,
+    )
+    return fig
 
 
-def generate_all_visualizations(df: pd.DataFrame, sentiment_column: str = "predicted_sentiment") -> dict:
-    from analytics import compute_summary
-    summary = compute_summary(df, sentiment_column)
-    bar_path = plot_sentiment_bar(summary["counts"])
-    donut_path = plot_sentiment_donut(summary["counts"])
-    trend_path = plot_sentiment_trend(df, sentiment_column)
-    return {
-        "bar_chart": str(bar_path),
-        "donut_chart": str(donut_path),
-        "trend_chart": str(trend_path) if trend_path else None,
-        "trend_chart_skipped_reason": None if trend_path else
-            "No usable date column found in the data - trend chart was not fabricated.",
-    }
+def plot_confusion_matrix_interactive(cm: List[List[int]], labels: List[str]) -> go.Figure:
+    fig = px.imshow(
+        cm, x=labels, y=labels, text_auto=True, color_continuous_scale="Blues",
+        labels=dict(x="Predicted label", y="True label", color="Count"),
+        title="Confusion Matrix (test set)",
+    )
+    fig.update_layout(margin=dict(l=10, r=10, t=40, b=10), height=420)
+    return fig
+
+
+def plot_model_comparison_interactive(comp_rows: List[dict]) -> go.Figure:
+    """comp_rows: [{'model': str, 'accuracy': float, 'macro_f1': float, 'weighted_f1': float}, ...]"""
+    df = pd.DataFrame(comp_rows)
+    melted = df.melt(id_vars="model", var_name="metric", value_name="score")
+    fig = px.bar(
+        melted, x="model", y="score", color="metric", barmode="group",
+        title="Model Comparison (validation split)",
+        labels={"score": "Score", "model": "", "metric": "Metric"},
+    )
+    fig.update_layout(margin=dict(l=10, r=10, t=40, b=10), height=380, xaxis_tickangle=-15)
+    return fig

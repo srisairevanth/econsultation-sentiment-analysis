@@ -27,11 +27,6 @@ def load_model_report() -> Optional[dict]:
         return json.load(f)
 
 
-def confusion_matrix_image_path() -> Optional[Path]:
-    path = config.VISUALIZATIONS_DIR / "confusion_matrix_test.png"
-    return path if path.exists() else None
-
-
 MODEL_DISPLAY_NAMES = {
     "tfidf_logreg_tuned": "TF-IDF + Logistic Regression (tuned)",
     "tfidf_logreg": "TF-IDF + Logistic Regression",

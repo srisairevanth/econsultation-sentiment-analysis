@@ -51,10 +51,12 @@ ml_pipeline/                       STAGE 3 - model training (see its README)
   model_utils.py                   split logic, candidate pipelines, metrics, confusion-matrix plot
   evaluate_model.py                standalone re-evaluation of the saved model
 
-frontend/                          STAGE 4 - Streamlit app, 5 tabs (see its README)
+frontend/                          STAGE 4 - Streamlit app, "modern dashboard" UI, 6 tabs (see its README)
   app.py                           entrypoint
+  theme.py                         color palette + CSS (dark sidebar, gradient header, card stats)
   predictor.py, batch_predict.py   single / batch sentiment prediction
-  analytics.py, visualizations.py  summary stats + charts
+  analytics.py, visualizations.py  summary stats + interactive Plotly charts
+  wordclouds.py                    "most distinctive words per sentiment" word clouds
   model_insights.py                loads models/model_metadata.json for the Model Performance tab
   chatbot_service.py, context_manager.py, prompts.py   Gemini-backed regulatory Q&A (additional feature)
 
