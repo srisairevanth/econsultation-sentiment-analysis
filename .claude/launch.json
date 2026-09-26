@@ -5,7 +5,7 @@
       "name": "streamlit-app",
       "runtimeExecutable": "streamlit",
       "runtimeArgs": ["run", "frontend/app.py", "--server.headless", "true"],
-      "port": 8502
+      "port": 8501
     }
   ]
 }
