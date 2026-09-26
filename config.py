@@ -173,7 +173,7 @@ MANUAL_REVIEW_SAMPLE_PATH = REPORTS_DIR / "manual_review_sample.csv"
 # Chatbot / Regulatory Assistant (Stage 4 - frontend/, additional feature)
 # ---------------------------------------------------------------------------
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
-GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.8-flash")
 MAX_CHAT_HISTORY_MESSAGES = 6  # trimmed to keep the context window bounded
 
 for _d in [DATA_DIR, RAW_DIR, LABELED_DIR, PROCESSED_DIR, SAMPLE_DIR, REGULATORY_CONTEXT_DIR,

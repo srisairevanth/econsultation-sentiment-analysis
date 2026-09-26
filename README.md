@@ -102,9 +102,13 @@ See `labeling_cleaning/README.md` for the exact labeling command.
 ## Gemini setup (Stage 4's additional feature)
 
 1. Get a free API key at https://aistudio.google.com/apikey (no payment method required for the
-   free tier; `gemini-2.5-flash`, the default model here, is free-of-charge with generous limits).
+   free tier; `gemini-3.8-flash`, the default model here, is free-of-charge with generous limits).
 2. Copy `.env.example` to `.env` and set `GEMINI_API_KEY=...` (never commit `.env`).
-3. Optionally set `GEMINI_MODEL` (defaults to `gemini-2.5-flash`).
+3. Optionally set `GEMINI_MODEL` (defaults to `gemini-3.8-flash`). Google periodically retires
+   older model names (e.g. `gemini-2.5-flash` was retired for new users after this project was
+   first built) - if the chatbot tab ever starts returning errors, check
+   https://ai.google.dev/gemini-api/docs/models for the current free-tier flash model name and
+   update `GEMINI_MODEL` in `.env` (no code changes needed).
 
 ## Commands (full pipeline, if re-running from scratch)
 
@@ -169,7 +173,7 @@ deploy needs no GPU, no Ollama, and no training step - it just loads what's alre
 4. Under the app's **Settings -> Secrets**, add (TOML format):
    ```toml
    GEMINI_API_KEY = "your_real_key_here"
-   GEMINI_MODEL = "gemini-2.5-flash"
+   GEMINI_MODEL = "gemini-3.8-flash"
    ```
    Streamlit Cloud exposes Secrets as environment variables to the running app, so
    `config.py`'s existing `os.getenv("GEMINI_API_KEY", "")` picks it up with no code changes.
