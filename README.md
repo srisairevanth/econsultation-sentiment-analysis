@@ -168,10 +168,13 @@ avoids data leakage: the test set is never seen during training, tuning, or mode
 The model, cleaned data, and reports are committed to the repo (see `.gitignore`), so a fresh
 deploy needs no GPU, no Ollama, and no training step - it just loads what's already there.
 
-1. Push this folder to a GitHub repository (the local folder is named `MINI Project`; the GitHub
-   repo name can be anything, e.g. `sentiment-econsultation`).
-2. Go to [share.streamlit.io](https://share.streamlit.io), sign in, and click "New app".
-3. Pick the repo/branch, and set **Main file path** to `frontend/app.py`.
+1. The code lives at `srisairevanth/econsultation-sentiment-analysis` on GitHub (private is fine -
+   Streamlit Cloud can deploy private repos once you grant it access to them).
+2. Go to [share.streamlit.io](https://share.streamlit.io), sign in with GitHub, and click "New app".
+3. Pick the repo, branch `master`, and set **Main file path** to `frontend/app.py`.
+   Under **Advanced settings**, choose **Python 3.13** (or 3.12) - the pinned versions in
+   `requirements.txt` are the ones this project was tested with; the saved model was trained with
+   scikit-learn 1.8.0, so don't loosen those pins.
 4. Under the app's **Settings -> Secrets**, add (TOML format):
    ```toml
    GEMINI_API_KEY = "your_real_key_here"
