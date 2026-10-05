@@ -211,7 +211,7 @@ with tab_single:
             if result["confidence"] is not None:
                 gcol, _ = st.columns([1, 1])
                 with gcol:
-                    st.plotly_chart(_confidence_gauge(result["confidence"], sentiment), use_container_width=True)
+                    st.plotly_chart(_confidence_gauge(result["confidence"], sentiment), use_container_width=True, key="single_gauge")
             else:
                 st.caption("Confidence score not available for this model type.")
 
@@ -248,9 +248,9 @@ with tab_batch:
                 st.markdown("**This batch's sentiment breakdown:**")
                 bcol_a, bcol_b = st.columns(2)
                 with bcol_a:
-                    st.plotly_chart(plot_sentiment_bar(batch_summary["counts"]), use_container_width=True)
+                    st.plotly_chart(plot_sentiment_bar(batch_summary["counts"]), use_container_width=True, key="batch_bar")
                 with bcol_b:
-                    st.plotly_chart(plot_sentiment_donut(batch_summary["counts"]), use_container_width=True)
+                    st.plotly_chart(plot_sentiment_donut(batch_summary["counts"]), use_container_width=True, key="batch_donut")
 
 # ---------------------------------------------------------------------------
 # TAB 3: Analytics dashboard
@@ -277,13 +277,13 @@ with tab_analytics:
 
         col_a, col_b = st.columns(2)
         with col_a:
-            st.plotly_chart(plot_sentiment_bar(summary["counts"]), use_container_width=True)
+            st.plotly_chart(plot_sentiment_bar(summary["counts"]), use_container_width=True, key="analytics_bar")
         with col_b:
-            st.plotly_chart(plot_sentiment_donut(summary["counts"]), use_container_width=True)
+            st.plotly_chart(plot_sentiment_donut(summary["counts"]), use_container_width=True, key="analytics_donut")
 
         trend_fig = plot_sentiment_trend(source_df, sentiment_col)
         if trend_fig:
-            st.plotly_chart(trend_fig, use_container_width=True)
+            st.plotly_chart(trend_fig, use_container_width=True, key="analytics_trend")
         else:
             st.caption("Sentiment-over-time chart skipped: no usable date column found in this data.")
 
@@ -335,6 +335,7 @@ with tab_performance:
             st.plotly_chart(
                 plot_confusion_matrix_interactive(metrics["confusion_matrix"], metrics["confusion_matrix_labels"]),
                 use_container_width=True,
+                key="perf_confusion_matrix",
             )
 
         st.markdown("**Model comparison (validation split):**")
@@ -349,15 +350,13 @@ with tab_performance:
         ]
         cc1, cc2 = st.columns([3, 2])
         with cc1:
-            st.plotly_chart(plot_model_comparison_interactive(comp_rows), use_container_width=True)
+            st.plotly_chart(plot_model_comparison_interactive(comp_rows), use_container_width=True, key="perf_comparison")
         with cc2:
             comp_df = pd.DataFrame(comp_rows).sort_values("macro_f1", ascending=False)
             st.dataframe(comp_df, use_container_width=True, hide_index=True)
 
         st.markdown("**Class distribution (full dataset):**")
-        dist_df = pd.DataFrame.from_dict(
-            report["dataset_class_distribution"], orient="index", columns=["count"])
-        st.bar_chart(dist_df)
+        st.plotly_chart(plot_sentiment_bar(report["dataset_class_distribution"]), use_container_width=True, key="perf_distribution")
 
         st.divider()
         split_info = report["split_info"]
