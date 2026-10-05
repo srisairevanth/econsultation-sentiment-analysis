@@ -174,6 +174,18 @@ MANUAL_REVIEW_SAMPLE_PATH = REPORTS_DIR / "manual_review_sample.csv"
 # ---------------------------------------------------------------------------
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.8-flash")
+# Tried in order when the primary model is overloaded (503) or unavailable. Verified live: when
+# gemini-3.8-flash / gemini-flash-latest returned "high demand", gemini-flash-lite-latest still
+# answered in ~2s.
+GEMINI_FALLBACK_MODELS = [
+    m.strip() for m in os.getenv("GEMINI_FALLBACK_MODELS", "gemini-flash-lite-latest,gemini-flash-latest").split(",")
+    if m.strip()
+]
+GEMINI_ATTEMPT_TIMEOUT_S = env_float("GEMINI_ATTEMPT_TIMEOUT_S", 12.0)   # one API call (normal answers take 2-9s)
+GEMINI_TOTAL_BUDGET_S = env_float("GEMINI_TOTAL_BUDGET_S", 50.0)         # whole question, all retries
+# Extra same-model tries on 5xx/timeout. 0 on purpose: an overloaded model stays overloaded for
+# minutes, so waiting on it again just delays the fallback model that would answer in ~2s.
+GEMINI_RETRIES_PER_MODEL = env_int("GEMINI_RETRIES_PER_MODEL", 0)
 MAX_CHAT_HISTORY_MESSAGES = 6  # trimmed to keep the context window bounded
 
 for _d in [DATA_DIR, RAW_DIR, LABELED_DIR, PROCESSED_DIR, SAMPLE_DIR, REGULATORY_CONTEXT_DIR,

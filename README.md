@@ -111,6 +111,11 @@ See `labeling_cleaning/README.md` for the exact labeling command.
    first built) - if the chatbot tab ever starts returning errors, check
    https://ai.google.dev/gemini-api/docs/models for the current free-tier flash model name and
    update `GEMINI_MODEL` in `.env` (no code changes needed).
+4. The free tier regularly answers `503 high demand` for a given model, so the chatbot automatically
+   falls back through `GEMINI_FALLBACK_MODELS` (default `gemini-flash-lite-latest`, then
+   `gemini-flash-latest`), skips a just-overloaded model for 60 seconds, and gives up cleanly after
+   ~50 seconds with a plain-English message instead of hanging. If you still see it often, a paid
+   key (or a different provider) is the real fix.
 
 ## Commands (full pipeline, if re-running from scratch)
 
