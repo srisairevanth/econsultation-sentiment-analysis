@@ -172,9 +172,10 @@ deploy needs no GPU, no Ollama, and no training step - it just loads what's alre
    Streamlit Cloud can deploy private repos once you grant it access to them).
 2. Go to [share.streamlit.io](https://share.streamlit.io), sign in with GitHub, and click "New app".
 3. Pick the repo, branch `master`, and set **Main file path** to `frontend/app.py`.
-   Under **Advanced settings**, choose **Python 3.13** (or 3.12) - the pinned versions in
-   `requirements.txt` are the ones this project was tested with; the saved model was trained with
-   scikit-learn 1.8.0, so don't loosen those pins.
+   The pinned versions in `requirements.txt` all ship prebuilt Linux wheels for Python 3.11-3.14,
+   so the default Python version Streamlit Cloud picks (currently 3.14) works. The saved model was
+   trained with scikit-learn 1.8.0, so don't loosen those pins. (An earlier `numpy==2.2.6` pin had
+   no Python 3.14 build and made the first deploy hang at "Processing dependencies".)
 4. Under the app's **Settings -> Secrets**, add (TOML format):
    ```toml
    GEMINI_API_KEY = "your_real_key_here"
