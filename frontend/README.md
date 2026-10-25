@@ -33,7 +33,8 @@ streamlit run frontend/app.py
    anything.
 1. **Single Comment Analysis** - paste a comment, one-click a fixed example, or hit "Surprise me"
    for a random real comment from the dataset; get Positive/Negative/Neutral on a colored result
-   card plus an interactive confidence gauge.
+   card plus an interactive confidence gauge. A warning appears when none of the comment's words
+   occur in the training vocabulary, since the label then has no evidence behind it.
 2. **Batch Analysis** - upload a CSV, get predictions for every row, download the results, see an
    inline interactive sentiment breakdown chart. `data/processed/test_split.csv` (130 real,
    held-out comments) works as a ready-made demo file.

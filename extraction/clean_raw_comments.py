@@ -112,8 +112,8 @@ def main() -> None:
 
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     OUTPUT_PATH.write_text(
-        json.dumps(cleaned_records, indent=2, ensure_ascii=False), encoding="utf-8"
-    )
+        json.dumps(cleaned_records, indent=2, ensure_ascii=False), encoding="utf-8", newline="\n"
+    )  # newline="\n": byte-identical output on Windows and Linux
 
     report_lines = [
         "Raw Comment Cleaning Report",
@@ -124,10 +124,10 @@ def main() -> None:
         f"Dropped - attachment-only placeholder (e.g. 'See attached'): {placeholder_only}",
         f"Dropped - exact duplicate text (after normalization): {exact_duplicate}",
         f"Kept - clean, unique, substantive comments: {kept}",
-        f"Output: {OUTPUT_PATH}",
+        f"Output: {OUTPUT_PATH.relative_to(EXTRACTION_DIR.parent).as_posix()}",
     ]
     report = "\n".join(report_lines)
-    REPORT_PATH.write_text(report, encoding="utf-8")
+    REPORT_PATH.write_text(report, encoding="utf-8", newline="\n")
     print(report)
 
 

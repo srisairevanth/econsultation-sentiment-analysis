@@ -41,8 +41,10 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(me
 logger = logging.getLogger(__name__)
 
 
-def tune_logreg_baseline(train_df: pd.DataFrame, random_state: int = config.RANDOM_STATE) -> Pipeline:
-    """Lightweight GridSearchCV over TF-IDF + LogisticRegression, fit on TRAIN only."""
+def tune_logreg_baseline(train_df: pd.DataFrame,
+                         random_state: int = config.RANDOM_STATE) -> tuple[Pipeline, dict]:
+    """Lightweight GridSearchCV over TF-IDF + LogisticRegression, fit on TRAIN only.
+    Returns (best fitted pipeline, best parameters)."""
     pipeline = Pipeline([
         ("tfidf", TfidfVectorizer(sublinear_tf=True)),
         ("clf", LogisticRegression(max_iter=1000, class_weight="balanced", random_state=random_state)),

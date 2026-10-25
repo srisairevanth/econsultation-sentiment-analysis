@@ -5,7 +5,9 @@ import argparse
 
 def main():
     parser = argparse.ArgumentParser(description="Analyze Regulations.gov comments text quality.")
-    parser.add_argument("file_path", nargs="?", default="raw_financial_comments_large.json", help="Path to comments JSON file (default: raw_financial_comments_large.json)")
+    default_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "raw_output", "batch2_ftc_1000.json")
+    parser.add_argument("file_path", nargs="?", default=default_path,
+                        help="Path to a raw Regulations.gov JSON batch (default: raw_output/batch2_ftc_1000.json)")
     args = parser.parse_args()
     
     file_path = args.file_path

@@ -1,5 +1,5 @@
 {
-  "dataset": "C:\\Users\\sai\\OneDrive\\Desktop\\MINI Project\\data\\processed\\test_split.csv",
+  "dataset": "data/processed/test_split.csv",
   "metrics": {
     "accuracy": 0.8923,
     "precision_macro": 0.8536,

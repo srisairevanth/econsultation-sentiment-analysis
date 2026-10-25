@@ -6,7 +6,7 @@ and evaluate_model.py so all three stay consistent.
 import logging
 import sys
 from pathlib import Path
-from typing import Dict, Tuple
+from typing import Dict
 
 import numpy as np
 import pandas as pd

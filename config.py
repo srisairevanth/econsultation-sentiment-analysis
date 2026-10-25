@@ -66,6 +66,15 @@ CLASS_IMBALANCE_RATIO_THRESHOLD = 3.0  # majority:minority ratio above this => f
 INVALID_LABEL_ACTION = "remove"        # "remove" or "flag" - see clean_dataset.py
 
 
+def display_path(path) -> str:
+    """Path as written into reports: relative to the project root when inside it (no machine-specific prefix)."""
+    path = Path(path).resolve()
+    try:
+        return path.relative_to(PROJECT_ROOT).as_posix()
+    except ValueError:
+        return str(path)
+
+
 def env_str(name: str, default: str) -> str:
     value = os.getenv(name)
     return default if value is None or value.strip() == "" else value.strip()

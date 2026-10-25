@@ -12,11 +12,11 @@ import argparse
 import logging
 import sys
 from pathlib import Path
+from typing import Tuple
 
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-import config
 from predictor import ModelNotAvailableError, _load_model
 from labeling_cleaning.text_utils import is_null_or_empty, normalize_text
 
@@ -24,7 +24,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(me
 logger = logging.getLogger(__name__)
 
 
-def _read_input(path: Path, column: str) -> pd.DataFrame:
+def _read_input(path: Path, column: str) -> Tuple[pd.DataFrame, str]:
     if path.suffix.lower() == ".json":
         df = pd.read_json(path)
     else:

@@ -208,6 +208,10 @@ with tab_single:
                 f'<span style="font-size:1.6rem; font-weight:800; color:{color};">{sentiment}</span></div>',
                 unsafe_allow_html=True,
             )
+            if not result.get("known_vocabulary", True):
+                st.warning("None of the words in this comment appear in the training data, so the model has "
+                           "no evidence to go on: this label only reflects how common each class was in "
+                           "training. Try a sentence about a regulation or policy.")
             if result["confidence"] is not None:
                 gcol, _ = st.columns([1, 1])
                 with gcol:

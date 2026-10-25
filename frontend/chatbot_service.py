@@ -11,8 +11,9 @@ backend-only (never import it from client-side/browser code).
 
 Reliability: the free Gemini tier regularly answers 503 "high demand" for a given
 model. Each question therefore walks a chain of models (GEMINI_MODEL first, then
-GEMINI_FALLBACK_MODELS), retrying server-side/timeout failures once per model, under
-an overall time budget so the UI never hangs.
+GEMINI_FALLBACK_MODELS), moving to the next model on server-side/timeout failures
+(GEMINI_RETRIES_PER_MODEL extra same-model tries, 0 by default), under an overall
+time budget so the UI never hangs.
 """
 import logging
 import sys
@@ -111,7 +112,8 @@ def generate_with_fallback(
     """
     Try each model in order until one returns text. Returns (answer, model_used).
 
-    - 500/502/503/504 or a per-attempt timeout: retry the same model (short backoff), then move on.
+    - 500/502/503/504 or a per-attempt timeout: retry the same model up to retries_per_model times
+      (short backoff), then move on.
     - 429 (quota), 404 (model retired) and other client errors: move straight to the next model.
     - 401/403: the key itself is rejected - raise immediately, no other model can help.
     - A model that exhausted its retries on overload is tried LAST for the next _COOLDOWN_S seconds

@@ -7,7 +7,7 @@ Speak from this in your own words — don't read it verbatim.
 
 ## Q: "Walk us through your preprocessing steps."
 
-Say this as a numbered story — it maps 1:1 to `preprocessing/clean_dataset.py`:
+Say this as a numbered story — it maps 1:1 to `labeling_cleaning/clean_dataset.py`:
 
 1. **Load the LLM-labeled data.** The dataset comes from the earlier stage
    (Ollama + Qwen3 8B labeling the Regulations.gov comments as Positive /
@@ -25,7 +25,7 @@ Say this as a numbered story — it maps 1:1 to `preprocessing/clean_dataset.py`
    first occurrence). Duplicate (comment, label) pairs are counted
    separately in the report for transparency.
 
-5. **Text normalization** (`preprocessing/text_utils.py`) — deliberately
+5. **Text normalization** (`labeling_cleaning/text_utils.py`) — deliberately
    *conservative*:
    - Unicode NFKC normalization (fixes encoding artifacts / mojibake)
    - Strip control characters
@@ -72,7 +72,7 @@ rather than committing to one blindly."
 TF-IDF vectorizer — unigrams + bigrams (`ngram_range=(1,2)`), `min_df=2`,
 `max_df=0.95`, `sublinear_tf=True`, capped at 20,000 features.
 
-**Three candidates (`training/model_utils.py`):**
+**Three candidates (`ml_pipeline/model_utils.py`):**
 1. **Logistic Regression** — `max_iter=1000`, `class_weight='balanced'`
 2. **Linear SVM** (`LinearSVC`, `class_weight='balanced'`) — wrapped in
    `CalibratedClassifierCV` (3-fold Platt scaling) because a raw linear SVM

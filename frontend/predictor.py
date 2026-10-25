@@ -41,11 +41,9 @@ def is_model_available() -> bool:
 def _confidence_from_pipeline(pipeline, text: str, predicted_label: str) -> Optional[float]:
     """
     Returns a probability-like confidence score for the predicted label if the
-    underlying classifier supports it (predict_proba / decision_function).
-    Documented limitation: for models without predict_proba and without our
-    CalibratedClassifierCV wrapper, confidence is not available (returns None).
+    pipeline supports predict_proba (all saved candidates do; LinearSVC through its
+    CalibratedClassifierCV wrapper). Otherwise confidence is not available (returns None).
     """
-    clf = pipeline.named_steps.get("clf") if hasattr(pipeline, "named_steps") else None
     try:
         if hasattr(pipeline, "predict_proba"):
             proba = pipeline.predict_proba([text])[0]
@@ -56,21 +54,34 @@ def _confidence_from_pipeline(pipeline, text: str, predicted_label: str) -> Opti
     return None
 
 
+def _has_known_words(pipeline, text: str) -> bool:
+    """
+    False when none of the text's words occur in the TF-IDF training vocabulary. The classifier
+    then sees an all-zero vector, so its label only reflects the training class balance.
+    """
+    vectorizer = pipeline.named_steps.get("tfidf") if hasattr(pipeline, "named_steps") else None
+    if vectorizer is None:
+        return True
+    return vectorizer.transform([text]).nnz > 0
+
+
 def predict_sentiment(comment_text: str) -> dict:
     """
     Predict Positive/Negative/Neutral for a single comment.
 
     Returns:
-        {"comment": str, "sentiment": str, "confidence": float|None, "error": str|None}
+        {"comment": str, "sentiment": str, "confidence": float|None,
+         "known_vocabulary": bool, "error": str|None}
     """
     if is_null_or_empty(comment_text):
-        return {"comment": comment_text, "sentiment": None, "confidence": None,
+        return {"comment": comment_text, "sentiment": None, "confidence": None, "known_vocabulary": False,
                 "error": "Comment is empty or contains no meaningful text."}
 
     try:
         pipeline = _load_model()
     except ModelNotAvailableError as exc:
-        return {"comment": comment_text, "sentiment": None, "confidence": None, "error": str(exc)}
+        return {"comment": comment_text, "sentiment": None, "confidence": None, "known_vocabulary": False,
+                "error": str(exc)}
 
     cleaned = normalize_text(comment_text)
     predicted_label = pipeline.predict([cleaned])[0]
@@ -80,6 +91,7 @@ def predict_sentiment(comment_text: str) -> dict:
         "comment": comment_text,
         "sentiment": predicted_label,
         "confidence": round(confidence, 4) if confidence is not None else None,
+        "known_vocabulary": _has_known_words(pipeline, cleaned),
         "error": None,
     }
 

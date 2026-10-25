@@ -58,7 +58,7 @@ def main():
 
     config.REPORTS_DIR.mkdir(parents=True, exist_ok=True)
     with open(config.REPORTS_DIR / "evaluation_report.json", "w", encoding="utf-8") as f:
-        json.dump({"dataset": str(dataset_path), "metrics": metrics}, f, indent=2, default=str)
+        json.dump({"dataset": config.display_path(dataset_path), "metrics": metrics}, f, indent=2, default=str)
     with open(config.REPORTS_DIR / "evaluation_report.txt", "w", encoding="utf-8") as f:
         f.write(text_report)
 
